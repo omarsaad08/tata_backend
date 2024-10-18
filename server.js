@@ -9,7 +9,7 @@ const { pool } = require('./configs/db_conf');
 async function startServer() {
   await pool.connect()
     .then(() => { console.log('connected to PostgreSQL database :)'); })
-    .catch(() => {
+    .catch((err) => {
       console.error('Error connecting to PostgreSQL:', err.stack);
       process.exit(1);
     })

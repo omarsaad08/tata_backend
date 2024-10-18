@@ -1,6 +1,6 @@
-CREATE DATABASE project055;
+CREATE DATABASE tata;
 
-\ connect project055;
+\ connect tata;
 
 CREATE EXTENSION hstore;
 
