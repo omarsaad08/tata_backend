@@ -1,7 +1,5 @@
-CREATE DATABASE tata;
-
-\ connect tata;
-
+-- CREATE DATABASE tata;
+-- \c tata;
 CREATE EXTENSION hstore;
 
 CREATE TABLE doctors (
@@ -14,7 +12,9 @@ CREATE TABLE doctors (
     address VARCHAR(200),
     rating NUMERIC,
     experience NUMERIC,
-    price NUMERIC
+    price NUMERIC,
+    speciality VARCHAR(20),
+    sessionsType VARCHAR(20)
 );
 
 CREATE TABLE babies (
@@ -34,7 +34,8 @@ CREATE TABLE follow_up (
     feedingMilestones BOOLEAN [],
     communicationMilestones BOOLEAN [],
     sensoryMilestones BOOLEAN [],
-    score NUMERIC,
+    healthy BOOLEAN,
+    ageInMonths NUMERIC,
     notes TEXT
 );
 
@@ -48,17 +49,28 @@ CREATE TABLE doctor_availability (
     -- 1 for Monday, 7 for Sunday
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
+    online BOOLEAN,
+    offline BOOLEAN,
     FOREIGN KEY (doctor_id) REFERENCES doctors(id)
 );
 
 CREATE TABLE appointments (
     appointment_id SERIAL PRIMARY KEY,
     baby_id INT REFERENCES babies(id),
+    baby_name VARCHAR(50) NOT NULL,
     doctor_id INT REFERENCES doctors(id),
+    doctor_name VARCHAR(50) NOT NULL,
     appointment_date DATE NOT NULL,
     appointment_time TIME NOT NULL,
-    status VARCHAR(20),
-    type VARCHAR(20) record VARCHAR(500),
+    status VARCHAR(20) NOT NULL,
+    -- (مطلوب, موافق, مرفوض, ملغي, منتهي, فائت)
+    type VARCHAR(20) NOT NULL,
+    -- (كشف، استشارة، جلسة)
+    place VARCHAR(20),
+    record VARCHAR(500),
+    roomId VARCHAR(20),
+    token VARCHAR(300),
+    online BOOLEAN NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

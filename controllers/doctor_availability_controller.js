@@ -14,7 +14,7 @@ const getDoctorsAvailabilityById = async (req, res) => {
   const { id } = req.params;
   try {
     const query = `SELECT * FROM doctor_availability WHERE $doctor_id = $1`;
-    const result = pool.query(query, [id]);
+    const result = await pool.query(query, [id]);
     res.status(200).json(result.rows);
   } catch (e) {
     console.error(e);
@@ -29,7 +29,7 @@ const doctorWeekAvailability = async (req, res) => {
   try {
     // Get doctor's availability
     const availabilityResult = await pool.query(
-      `SELECT weekday, start_time, end_time
+      `SELECT *
         FROM doctor_availability
         WHERE doctor_id = $1`,
       [doctor_id]
@@ -55,14 +55,23 @@ const doctorWeekAvailability = async (req, res) => {
 }
 
 const postDoctorAvailability = async (req, res) => {
-  const { doctor_id, weekday, start_time, end_time } = req.body;
+  const availabilityData = req.body; // Expecting an array of availability objects
+
   try {
-    const query = `INSERT INTO doctor_availability (doctor_id, weekday, start_time, end_time) VALUES ($1, $2, $3, $4) RETURNING *`;
-    const result = pool.query(query, [doctor_id, weekday, start_time, end_time]);
-    res.status(200).json(result.rows);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: 'Database error' });
+    // Insert each availability into the database
+    for (const availability of availabilityData) {
+      const { doctor_id, weekday, start_time, end_time, online, offline } = availability;
+
+      await pool.query(
+        'INSERT INTO doctor_availability (doctor_id, weekday, start_time, end_time, online, offline) VALUES ($1, $2, $3, $4, $5, $6)',
+        [doctor_id, weekday, start_time, end_time, online, offline]
+      );
+    }
+
+    res.status(200).json({ message: 'Availability saved successfully!' });
+  } catch (error) {
+    console.error('Error saving availability:', error);
+    res.status(500).json({ error: 'Failed to save availability' });
   }
 }
 

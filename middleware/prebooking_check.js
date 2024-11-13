@@ -1,4 +1,4 @@
-const {pool} = require('../configs/db_conf');
+const { pool } = require('../configs/db_conf');
 
 module.exports = {
   checkDoctorAvailability,

@@ -8,6 +8,7 @@ const doctors = require('./routes/doctors');
 const babies = require('./routes/babies');
 const follow_up = require('./routes/follow_up');
 const appointments = require('./routes/appointments');
+const payment = require('./routes/payment');
 const doctorAvailability = require('./routes/doctor_availability');
 app.use(cors({ origin: 'http://localhost:3000', }));
 app.use(morgan(
@@ -20,4 +21,5 @@ app.use('/baby', babies);
 app.use('/follow_up', follow_up);
 app.use('/appointments', appointments);
 app.use('/doctorAvailability', doctorAvailability);
+app.use('/payment', payment)
 module.exports = app;
