@@ -3,7 +3,6 @@ const app = require('./app');
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
 const server = http.createServer(app);
-const mongoose = require('mongoose');
 const { pool } = require('./configs/db_conf');
 
 async function startServer() {
